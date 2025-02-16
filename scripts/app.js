@@ -1,234 +1,436 @@
 "use strict";
-/*
-Names: William Dawson, Hilaal Mansoor
-Student IDs: 100945808, 100957010
-Date: 01-24-2025
- */
 
 //IIFE - Immediately invoked functional expression.
-
 (function () {
 
-    /**
-     * displays the home page and runs the functions for it to work.
-     */
+    function CheckLogin(){
+        console.log("Checking user login status")
+
+        const loginNav = document.getElementById("loginNav");
+
+        if (!loginNav) {
+            console.warn("Login Nav element not found.")
+            return;
+        }
+
+        const userSession = sessionStorage.getItem("user");
+        if (userSession) {
+            loginNav.innerHTML = `<i class="fas fa-sign-out-alt"></i> Logout`;
+            loginNav.href = "#";
+
+            loginNav.addEventListener("click", (event) => {
+                event.preventDefault();
+                sessionStorage.removeItem("user");
+                location.href = "login.html";
+            });
+        }
+    }
+
+    function UpdateActiveNavLink(){
+        console.log("[INFO] Updating active nav link..");
+
+        const currentPage = document.title.trim();
+        const navLinks = document.querySelectorAll("nav a");
+
+        navLinks.forEach(link => {
+            if (link.textContent === currentPage) {
+                link.classList.add("active");
+            }else{
+                link.classList.remove("active");
+            }
+        })
+    }
+
+    function LoadHeader(){
+        console.log("[INFO] Loading header...");
+
+        return fetch("header.html")
+            .then(response => response.text())
+            .then(data => {
+                document.querySelector("header").innerHTML = data;
+                UpdateActiveNavLink();
+            })
+            .catch(error => console.log(error));
+    }
+
+    function TestFullName(){
+        let messageArea = $("#messageArea");
+        // Making the regex                 first name      spacing     last name.
+        let fullNamePattern = /^([A-Z][a-z]{1,25})+(\s|,|-)([A-Z][a-z]{1,25})+$/;
+
+        $("#fullName").on("blur", function () {
+           let fullNameText = $(this).val();
+           // Validating input
+           if(!fullNamePattern.test(fullNameText)){
+               $(this).trigger("focus");
+               $(this).trigger("select");
+               messageArea.addClass("alert alert-danger");
+               messageArea.text("Please enter a valid first and last name. [firstName] {middleName} [lastName]")
+               messageArea.show();
+           }else{
+               messageArea.removeAttr("class");
+               messageArea.hide();
+           }
+        });
+    }
+
+    function AddContact(fullName, contactNumber, emailAddress){
+
+        let contact = new core.Contact(fullName, contactNumber, emailAddress);
+        if(contact.serialize()){
+            // the primary key for a contact --> contact_+ data & time
+            let key = `contact_${Date.now()}`
+            localStorage.setItem(key, contact.serialize());
+        }
+    }
+
+    function DisplayEditContactPage(){
+        console.log("DisplayEditContactPage() called...");
+
+        const page = location.hash.substring(1);
+
+        console.log(page);
+
+
+        switch(page){
+            case "add": {
+                const heading = document.querySelector("main>h1");
+                const editButton = document.getElementById("editButton");
+                const cancelButton = document.getElementById("cancelButton");
+
+                document.title = "Add Contact";
+
+                if (heading) {
+                    heading.textContent = "Add Contact";
+                }
+
+                if (editButton) {
+                    editButton.innerHTML = `<i class="fa-solid fa-user-plus"></i> Add Contact`;
+                    editButton.addEventListener("click", () => {
+                        //Prevent default form submission.
+                        event.preventDefault();
+
+                        AddContact(
+                            document.getElementById("fullName").value,
+                            document.getElementById("contactNumber").value,
+                            document.getElementById("emailAddress").value,
+                        );
+                        location.href = ("contact-list.html");
+                    });
+
+
+                }
+
+                if (cancelButton) {
+                    cancelButton.addEventListener("click", () => {
+                        location.href = ("contact-list.html");
+                    });
+                }
+                }
+                break;
+            default: {
+
+                const contact = new core.Contact();
+                const contactData = localStorage.getItem(page)
+
+                if (contactData) {
+                    contact.deserialize(contactData);
+                }
+
+                document.getElementById("fullName").value = contact.fullName
+                document.getElementById("contactNumber").value = contact.contactNumber;
+                document.getElementById("emailAddress").value = contact.emailAddress;
+
+
+                const editButton = document.getElementById("editButton");
+                const cancelButton = document.getElementById("cancelButton");
+
+
+                if (editButton) {
+                    editButton.addEventListener("click", () => {
+                        event.preventDefault();
+
+                        contact.fullName = document.getElementById("fullName").value;
+                        contact.contactNumber = document.getElementById("contactNumber").value;
+                        contact.emailAddress = document.getElementById("emailAddress").value;
+
+                        localStorage.setItem(page, contact.serialize());
+                        location.href = ("contact-list.html");
+
+                    });
+                }
+
+                if (cancelButton) {
+                    cancelButton.addEventListener("click", () => {
+                        location.href = ("contact-list.html");
+                    });
+                }
+            }
+                break;
+        }
+    }
+
+    async function DisplayWeather(){
+        const apiKey = "87f25517c7740d00aee5baa5c25dc24e";
+        const city ="Oshawa";
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+        try{
+            const response = await fetch(url)
+
+            // Not 200 series status code.
+            if(!response.ok){
+                throw new Error("Failed to fetch weather data from openweathermap.org.")
+            }
+
+            const data = await response.json();
+            console.log("Weather API Response", data)
+
+            const weatherDataElement = document.getElementById("weather-data");
+            weatherDataElement.innerHTML = `<strong>City: </strong> ${data.name} <br>
+                                            <strong>Temperature: </strong> ${data.main.temp} <br>
+                                            <strong>Weather: </strong> ${data.weather[0].description}`;
+
+        }catch(error){
+            console.error("Error fetching weather data", error);
+            document.getElementById("weather-data").textContent = "Unable to contact weather data at this time.";
+        }
+    }
+
     function DisplayHomePage(){
         console.log("Calling DisplayHomePage()");
 
-        let aboutUsBtn = document.getElementById("getInvolvedBtn");
-        aboutUsBtn.addEventListener("click", function(){
-            location.href="opportunities.html";
+        let aboutUsBtn = document.getElementById("AboutUsBtn");
+
+
+        // Arrow notation
+        aboutUsBtn.addEventListener("click", () => {
+            location.href="about.html";
         });
+
+        //Add call to weathermap.org
+        DisplayWeather();
+
+        // Add content to the main element in index.html
+        document.querySelector("main").insertAdjacentHTML(
+          "beforeend",
+          `<p id="mainParagraph" class="mt-5">This is the first paragraph.</p>`
+        );
+
+        // Add article with paragraph to the body
+        document.body.insertAdjacentHTML(
+            "beforeend",
+            `<article><p id="articleParagraph" class="mt-3">This is the article paragraph.</p></article>`
+        );
     }
 
-    /**
-     * displays the opportunities page and runs all functions required for it to work.
-     */
-    function DisplayOpportunitiesPage(){
-        console.log("Calling DisplayOpportunitiesPage()");
-
-        const events = [
-            { title: 'Fundraiser Gala', description: "Assist at a fundraiser", date: '2023-11-05', category: 'fundraisers' },
-            { title: 'Community Cleanup',description: "Help cleanup around the community.", date: '2023-11-12', category: 'cleanups' },
-            { title: 'Coding Workshop', description: "Assist teaching at a coding workshop.", date: '2023-11-19', category: 'workshops' },
-            { title: 'Charity Run',description: "Participate in a run to gather funds for a charity.", date: '2023-11-26', category: 'fundraisers' },
-            { title: 'Beach Cleanup', description: "Help cleanup around the local beach.", date: '2023-12-03', category: 'cleanups' },
-            { title: 'Art Workshop',description: "Assist in a local art workshop." , date: '2023-12-10', category: 'workshops' }
-        ];
-
-        // Programmatically adding the list of events.
-        let data = `    
-        <tr>
-            <td>#</td>
-            <td>Title</td>
-            <td>Description</td>
-            <td>Date and Time</td>
-            <td></td>
-        </tr>
-        `;
-        let index = 1
-        let opportunityList = document.getElementById("opportunities");
-        for(const event of events){
-        data += `
-                <tr>
-                <td>${index}</td>
-                <td>${event.title}</td>
-                <td>${event.description}</td>
-                <td>${event.date}</td>
-                <td> <button id="getInvolved${index}" class="btn btn-primary" name="getInvolved">Sign Up</button></td>
-            </tr>
-            `
-        index++;
-        }
-        opportunityList.innerHTML = data;
-
-        // Adding an event to each button in the list.
-        let getInvolvedBtn = document.getElementsByName("getInvolved");
-        const formModal = new bootstrap.Modal(document.getElementById(`formModal`));
-        for(const btn of getInvolvedBtn){
-        btn.addEventListener("click", function(){
-            formModal.show(btn);
-            //location.href="contact.html";
-        });
-        }
-
-        // Form submission
-        let formSubmit = document.getElementById("formModalSubmit");
-        let modalBody = document.querySelector('.modal-body');
-        let modalHTML = modalBody.innerHTML;
-        let formClose = document.getElementById("formModalCancel");
-        formSubmit.addEventListener("click", function(){
-            let modalName = document.getElementById("fullName")
-            let modalEmail = document.getElementById("emailAddress");
-            let modalRole = document.getElementById("preferredRole");
-            if(modalName.value.length > 0 && modalEmail.value.length > 0 && modalRole.value.length > 0){
-                modalBody.innerHTML = `Submission confirmed.`;
-                setTimeout(function () {
-                    formModal.hide();
-                    modalBody.innerHTML = modalHTML;
-                }, 2000)
-            }else{
-                modalBody.innerHTML = modalHTML + `<br> Missing one or more fields.`
-            }
-        })
-        formClose.addEventListener("click", function(){
-            modalBody.innerHTML = modalHTML;
-        })
+    function DisplayAboutPage(){
+        console.log("Calling DisplayAboutPage()");
 
     }
 
-    /**
-     * logs runs all functions required for the contacts page to work.
-     */
+    function DisplayProductsPage(){
+        console.log("Calling DisplayProductsPage()");
+    }
+
     function DisplayContactsPage(){
         console.log("Calling DisplayContactsPage()");
-        let confModal = new bootstrap.Modal(document.getElementById(`confirmationModal`));
-        let submitBtn = document.getElementById("Sendbtn");
-        submitBtn.addEventListener("click", function(){
-            //let emailAddress = document.getElementById("emailAddress");
-            //let fullName = document.getElementById("fullName");
-            //let subject = document.getElementById("subject");
-            //if(emailAddress.checkValidity() && fullName.checkValidity() && emailAddress.checkValidity()) {
-                confModal.show(submitBtn);
-                setTimeout(function () {
-                    location.href = "index.html";
-                }, 5000)
-            //}
+
+        let sendButton = document.getElementById("sendButton");
+        let subscribeCheckbox = document.getElementById("subscribeCheckbox");
+
+        sendButton.addEventListener("click", function(){
+           if(subscribeCheckbox.checked){
+               let contact = new core.Contact(fullName.value, contactNumber.value, emailAddress.value);
+                if(contact.serialize()){
+                    // the primary key for a contact --> contact_+ data & time
+                    let key = `contact_${Date.now()}`
+                    localStorage.setItem(key, contact.serialize());
+                }
+           }
+        });
+    }
+
+    function DisplayContactListPage(){
+        console.log("Calling DisplayContactListPage()");
+
+        console.log(localStorage.length);
+        if(localStorage.length > 0){
+            console.log("Local Storage Access")
+            let contactList = document.getElementById("contactList");
+            let data = "";
+
+            let keys = Object.keys(contactList);
+            console.log(keys);
+
+            let index = 1;
+            for(const key of keys){
+
+                if(key.startsWith("contact_")) {
+                    let contactData = localStorage.getItem(key);
+
+                    try{
+                        console.log(contactData);
+                        let contact = new core.Contact();
+                        contact.deserialize(contactData);
+
+                        data += `<tr>
+                                    <th scope="row" class="text-center">${index}</th>
+                                    <td>${contact.fullName}</td>
+                                    <td>${contact.contactNumber}</td>
+                                    <td>${contact.emailAddress}</td>
+                                    <td class="text-center">
+                                    <button value="${key}" class="btn btn-warning btn-sm edit"> <i class="fa-solid fa-pen-to-square"></i> Edit </button>
+                                    </td>
+                                    <td>
+                                    <button value="${key}" class="btn btn-danger btn-sm delete"> <i class="fa-solid fa-trash"></i> Delete </button>
+                                    </td>
+                                    </tr>`;
+
+                    }catch(error){
+                        console.error("Error deserializing contact data.")
+                    }
+                }else{
+                    console.warn("Skipping non-contact key")
+                }
+
+            }
+            contactList.innerHTML = data;
+        }
+
+        const addButton = document.getElementById("addButton");
+        if(addButton) {
+            addButton.addEventListener("click", () => {
+                location.href = "edit.html#add";
+            });
+        }
+
+        const deleteButtons = document.querySelectorAll("button.delete")
+        deleteButtons.forEach((button) => {
+            button.addEventListener("click", function() {
+                if(confirm("Delete contact, please confirm?")){
+                    localStorage.removeItem(this.value);
+                    location.href = "contact-list.html";
+                }
+            });
+        });
+
+        const editButtons = document.querySelectorAll("button.edit");
+        editButtons.forEach((button) => {
+            button.addEventListener("click", function() {
+                location.href = `edit.html#${this.value}`;
+            });
+        });
+    }
+
+    function DisplayServicesPage(){
+        console.log("Calling DisplayServicesPage()");
+    }
+
+    function DisplayLoginPage(){
+        console.log("Calling DisplayLoginPage()");
+        let messageArea = document.getElementById("messageArea");
+        messageArea.style.display = "none";
+        fetch('data/user.json')
+            .then(response => {
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                let users = data;
+                let userName = document.getElementById("username");
+                let password = document.getElementById("password");
+                let loginButton = document.getElementById("loginButton");
+                let validUser = new core.User();
+                loginButton.addEventListener("click", function(){
+                    let valid = false;
+                    users["users"].forEach((user)=>{
+                        if(user.Username === userName.value && user.Password === password.value){
+                            valid = true;
+                            validUser.fromJSON(user);
+                        }
+                    })
+                    if(valid){
+                        messageArea.style.display = "none";
+                        window.sessionStorage.setItem(`user`, JSON.stringify({
+                            DisplayName: validUser.DisplayName,
+                            EmailAddress: validUser.EmailAddress,
+                            Username: validUser.Username,
+                        }));
+                        location.href = "contact-list.html";
+                    }else{
+                        userName.focus();
+                        messageArea.classList.add("alert", "alert-danger");
+                        messageArea.textContent = "Username or password incorrect.";
+                        messageArea.style.display = "block";
+                    }
+                })
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('There was a problem with the fetch operation:', error);
+            });
+
+        let cancelButton = document.getElementById("cancelButton");
+        cancelButton.addEventListener("click", function(){
+            document.getElementById("loginForm").reset();
+            location.href = "index.html";
         })
     }
 
-    /**
-     * runs all functions required for the display events page to work.
-     */
-    function DisplayEventsPage() {
-        console.log(" Displaying Events Page...");
-
-        const events = [
-            { title: 'Fundraiser Gala', date: '2025-02-05', category: 'fundraisers' },
-            { title: 'Community Cleanup', date: '2025-02-12', category: 'cleanups' },
-            { title: 'Coding Workshop', date: '2025-02-19', category: 'workshops' },
-            { title: 'Charity Run', date: '2025-02-26', category: 'fundraisers' },
-            { title: 'Beach Cleanup', date: '2025-02-03', category: 'cleanups' },
-            { title: 'Art Workshop', date: '2025-02-10', category: 'workshops' }
-        ];
-
-        const calendarEl = document.getElementById('calendar');
-
-        /**
-         * Renders the calendar based on the events and the filter.
-         * @param eventsToRender all the events
-         * @param filter the category to filter by
-         */
-        function renderCalendar(eventsToRender, filter) {
-            calendarEl.innerHTML = '';
-
-            const daysInMonth = new Date(2025, 2, 0).getDate(); // February 2025
-            const firstDay = new Date(2025, 1, 1).getDay(); // February 1, 2025
-
-            let calendarHTML = '<table class="table table-bordered"><thead><tr>';
-            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            daysOfWeek.forEach(day => {
-                calendarHTML += `<th>${day}</th>`;
-            });
-            calendarHTML += '</tr></thead><tbody><tr>';
-
-            for (let i = 0; i < firstDay; i++) {
-                calendarHTML += '<td></td>';
-            }
-            // Check if the current day should start a new row in the calendar table
-            for (let day = 1; day <= daysInMonth; day++) {
-                if ((day + firstDay - 1) % 7 === 0) {
-                    calendarHTML += '</tr><tr>';
-                }
-                //The const gets the time in UTC due to an issue where going from EST to UTC would cause the date to be off by 1
-                // really silly, I know.
-                const event = eventsToRender.find(event => new Date(event.date).getUTCDate() === day);
-                if (event && event.category === filter || event && filter === 'all' ) {
-                    const eventClass = filter === 'all' ? '' : (event.category === filter ? 'highlighted-event' : 'greyed-out-event');
-                    calendarHTML += `<td class="${eventClass}">${day}<br>${event.title}</td>`;
-                } else {
-                    calendarHTML += `<td>${day}</td>`;
-                }
-            }
-
-            calendarHTML += '</tr></tbody></table>';
-            calendarEl.innerHTML = calendarHTML;
-        }
-
-        function callEvent(event) {
-            console.log(`Calling event: ${event.title} on ${event.date} (${event.category})`);
-        }
-
-        renderCalendar(events, 'all');
-
-        const addEventBtn = document.getElementById("addEventBtn");
-        addEventBtn.addEventListener("click", () => {
-            const eventTitleInput = document.getElementById("eventTitle");
-            const eventDateInput = document.getElementById("eventDate");
-            const eventCategoryInput = document.getElementById("eventCategoryInput");
-
-            const title = eventTitleInput.value;
-            const date = eventDateInput.value;
-            const category = eventCategoryInput.value;
-
-            if (title && date && category) {
-                const newEvent = { title, date, category };
-                events.push(newEvent);
-                renderCalendar(events, 'all');
-
-                eventTitleInput.value = "";
-                eventDateInput.value = "";
-                eventCategoryInput.value = "fundraisers";
-
-                console.log(`Event added: ${title} on ${date} (${category})`);
-                callEvent(newEvent);
-            }
-        });
-        //the filter will change the text of unselected events to gray and highlight the selected ones
-        const eventCategoryFilter = document.getElementById("eventCategory");
-        eventCategoryFilter.addEventListener("change", () => {
-            const filter = eventCategoryFilter.value;
-            renderCalendar(events, filter);
-        });
+    function DisplayRegisterPage(){
+        console.log("Calling DisplayRegisterPage()");
     }
+
+
 
     function Start() {
         console.log("Starting....");
+        console.log(`Current document title: ${document.title}`);
+
+        //Load NavBar then run checklogin.
+        LoadHeader().then( () => {
+            CheckLogin();
+        });
 
         switch(document.title){
             case "Home":
                 DisplayHomePage();
                 break
+            case "About":
+                DisplayAboutPage();
+                break
+            case "Products":
+                DisplayProductsPage();
+                break
             case "Contact":
                 DisplayContactsPage();
                 break
-            case "Opportunities":
-                DisplayOpportunitiesPage();
+            case "Services":
+                DisplayServicesPage();
                 break
-            case "Events":
-                DisplayEventsPage();
+            case "Contact List":
+                DisplayContactListPage();
+                break
+            case "Edit Contact":
+                DisplayEditContactPage();
+                break
+            case "Login":
+                DisplayLoginPage();
+                break
+            case "Register":
+                DisplayRegisterPage();
+                break
+            default:
+                console.error("No matching case for page title.")
+                break;
         }
 
-    }window.addEventListener("load", Start);
-
+    }window.addEventListener("DOMContentLoaded", () =>{
+        console.log("DOM fully loaded and parsed");
+        Start()
+    });
 })();
