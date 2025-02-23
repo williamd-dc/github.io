@@ -1,3 +1,1 @@
-"use strict";
-
-let core;
+let main;

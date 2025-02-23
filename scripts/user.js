@@ -1,4 +1,4 @@
-(function(core){
+(function(main){
     class User{
 
         constructor(displayName = "", emailAddress = "", username = "", password = "" ){
@@ -78,5 +78,5 @@
 
     }
 
-    core.User = User;
-})(core || (core = {}));
+    main.User = User;
+})(main || (main = {}));
