@@ -1,52 +1,16 @@
-.input-group-addon:first-child
-{
-    border-right: 0;
+.carousel-container {
+    max-width: 300px;
+    margin: 0 auto;
 }
 
-.input-group-addon
-{
-    padding: 6px 12px;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1;
-    text-align: center;
-    border: 1px solid darkgrey;
-    border-radius: 4px;
-}
-
-.input-group-addon .fa
-{
-    font-size: 18px;
-}
-
-.input-group .form-control
-{
-    position:relative;
-    z-index: 2;
-    float:left;
-    margin-bottom: 0;
-}
-
-.input-group .form-control:last-child
-{
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-
-
-.login
-{
-    padding: 2rem 1rem;
-    margin-bottom: 2rem;
-    background-color: lightgrey;
-    border-radius: .3rem;
-}
-
-.login input
-{
+.nav-item .dropdown-menu {
+    display: none;
+    position: absolute;
     background-color: white;
-    border-color: darkgrey;
-    border-radius: .4em;
-    width: 100%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.nav-item:hover .dropdown-menu {
+    display: block;
 }

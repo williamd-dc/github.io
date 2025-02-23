@@ -1,68 +1,83 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Contact</title>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Contact</title>
 
-    <!-- CSS section -->
-    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="content/app.css">
+  <!-- CSS section -->
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="./content/app.css">
 
 </head>
 <body>
-<header></header>
+<header>
+
+</header>
 
 <main class="container">
-    <h1 class="mb-5">
-        Contact Page
-        <div id="messageArea"></div>
-    </h1>
-    <form class="col-lg-6 col-md-10 col-sm-12 mb-4">
-        <div class="input-group mb-3">
-            <span class="input-group-text"> Full Name: </span>
-            <input id="fullName" name="fullName" type="text" class="form-control" aria-describedby="Full Name"  aria-label="Full Name" required>
-        </div>
+  <h1 class="mb-5">Contact us</h1>
+  <form id="contactForm" class="col-lg-6 col-md-10 col-sm-12 mb-4">
 
-        <div class="input-group mb-3">
-            <span class="input-group-text"> Contact Number: </span>
-            <input id="contactNumber" name="contactNumber" type="tel" class="form-control" aria-describedby="Contact Number"  aria-label="Contact Number" required>
-        </div>
-
-        <div class="input-group mb-3">
-            <span class="input-group-text"> Email Address: </span>
-            <input id="emailAddress" name="emailAddress" type="email" class="form-control" aria-describedby="Email Address"  aria-label="Email Address" required>
-        </div>
-
-        <div class="input-group mb-3">
-            <span class="input-group-text"> Message: </span>
-            <textarea id="message" name="message" class="form-control" aria-describedby="Message Area"  aria-label="Message Area"></textarea>
-        </div>
-
-        <div class="input-group mb-3">
-            <input id="subscribeCheckbox" name="subscribeCheckbox" type="checkbox" class="form-check-input me-2">
-            <label class="form-check-label" for="subscribeCheckbox">Subscribe to our Contact List</label>
-        </div>
-        <button id="sendButton" type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i>Submit</button>
-        <button id="cancelButton" type="reset" class="btn btn-warning"><i class="fa-solid fa-ban"></i>Cancel</button>
-    </form>
-
-    <div class="col-lg-4 col-md-6">
-        <a href="contact-list.html" class="btn btn-outline-primary mt-4">Show Contact List</a>
+    <div class="mb-3">
+      <label for="fullName" class="form-label">Full Name</label>
+      <input id="fullName" name="fullName" type="text" class="form-control"
+             aria-describedby="Full Name" aria-label="Full Name" required>
     </div>
+
+
+    <div class="mb-3">
+      <label for="emailAddress" class="form-label">Email address</label>
+      <input id="emailAddress" name="emailAddress" type="email" class="form-control"
+             aria-describedby="Email Address" aria-label="Email Address" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="subject" class="form-label">Subject:</label>
+      <input id="subject" name="subject" type="Text" class="form-control"
+             aria-describedby="subject" aria-label="subject" required>
+    </div>
+
+
+
+    <div class="input-group mb-3" style="width:100%">
+     <label for="message" class="input-group-text">Your Message: </label>
+     <textarea id="message" name="message" style="width:100%; height:110px;" aria-describedby="Message area" aria-label="Message Area" required></textarea>
+    </div>
+
+    <div class="mb-3 input-group">
+      <input type="checkbox" name="subscribeCheckbox" class="form-check-input me-2" id="subscribeCheckbox">
+      <label class="form-check-label" for="subscribeCheckbox"> Sub to our contact list </label>
+    </div>
+    <button id="Sendbtn" class="btn btn-primary"><i class="fa-solid fa-envelope"></i> Submit</button>
+    <button id="Cancelbtn" type="button" class="btn btn-primary"> <i class="fa-solid fa-x"></i> Cancel</button>
+  </form>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="formModalLabel">Submission Confirmation</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="word-wrap: break-word;">
+        <p> </p>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
 
 </main>
 
 
-
 <!-- Scripting Section -->
-<script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="./scripts/namespace.js"></script>
-<script src="./scripts/contact.js"> </script>
 <script src="./scripts/app.js"></script>
+<script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>
