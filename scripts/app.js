@@ -101,7 +101,7 @@ const router = new Router(routes);
                             document.getElementById("contactNumber").value,
                             document.getElementById("emailAddress").value,
                         );
-                        routes.navigate("/contact-list");
+                        router.navigate("/contact-list");
                     });
 
 
@@ -109,7 +109,7 @@ const router = new Router(routes);
 
                 if (cancelButton) {
                     cancelButton.addEventListener("click", () => {
-                        routes.navigate("/contact-list");
+                        router.navigate("/contact-list");
                     });
                 }
                 }
@@ -141,14 +141,14 @@ const router = new Router(routes);
                         contact.emailAddress = document.getElementById("emailAddress").value;
 
                         localStorage.setItem(page, contact.serialize());
-                        routes.navigate("/contact-list");
+                        router.navigate("/contact-list");
 
                     });
                 }
 
                 if (cancelButton) {
                     cancelButton.addEventListener("click", () => {
-                        routes.navigate("/contact-list");
+                        router.navigate("/contact-list");
                     });
                 }
             }
@@ -243,7 +243,7 @@ const router = new Router(routes);
            }
         });
 
-        const contactListButton = document.getElementById("ShowContactList");
+        const contactListButton = document.getElementById("showContactList");
 
         contactListButton.addEventListener("click", function(event){
            event.preventDefault();
@@ -301,7 +301,7 @@ const router = new Router(routes);
         const addButton = document.getElementById("addButton");
         if(addButton) {
             addButton.addEventListener("click", () => {
-                routes.navigate("/edit#add");
+                router.navigate("/edit#add");
             });
         }
 
@@ -324,7 +324,7 @@ const router = new Router(routes);
         const editButtons = document.querySelectorAll("button.edit");
         editButtons.forEach((button) => {
             button.addEventListener("click", function() {
-                routes.navigate(`/edit#${this.value}`);
+                router.navigate(`/edit#${this.value}`);
             });
         });
     }
