@@ -1,0 +1,44 @@
+    <h1 class="mb-5">
+        Welcome to Volunteer Connect <br>
+        <button id="getInvolved" class="btn btn-primary">Get Involved</button>
+    </h1>
+
+    <div class="mb-3">
+        <label for="eventCategory" class="form-label">Filter by Category</label>
+        <select class="form-select" id="eventCategory">
+            <option value="all">All</option>
+            <option value="fundraisers">Fundraisers</option>
+            <option value="workshops">Workshops</option>
+            <option value="cleanups">Cleanups</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="eventTitle" class="form-label">Event Title</label>
+        <input type="text" class="form-control" id="eventTitle" placeholder="Enter event title">
+    </div>
+    <div class="mb-3">
+        <label for="eventDate" class="form-label">Event Date</label>
+        <input type="date" class="form-control" id="eventDate">
+    </div>
+    <div class="mb-3">
+        <label for="eventCategoryInput" class="form-label">Event Category</label>
+        <select class="form-select" id="eventCategoryInput">
+            <option value="fundraisers" >Fundraisers</option>
+            <option value="workshops">Workshops</option>
+            <option value="cleanups">Cleanups</option>
+        </select>
+    </div>
+    <button id="addEventBtn" class="btn btn-primary mb-3">Add Event</button>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Month of February</th>
+
+        </tr>
+        </thead>
+        <tbody id="calendar">
+
+        </tbody>
+    </table>

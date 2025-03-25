@@ -1,0 +1,26 @@
+{
+  "name": "week1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "William Dawson",
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.3",
+    "d3": "^7.9.0",
+    "debug": "^4.4.0",
+    "fullcalendar": "^6.1.15",
+    "main.css": "^3.0.0",
+    "source-map-loader": "^5.0.0",
+    "ts-loader": "^9.5.2"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.10",
+    "@types/chart.js": "^2.9.41",
+    "typescript": "^5.8.2"
+  }
+}

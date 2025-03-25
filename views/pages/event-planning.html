@@ -1,0 +1,22 @@
+<h1>Event Planning</h1>
+<form id="eventForm">
+    <label for="eventName">Event Name:</label>
+    <input type="text" id="eventName" name="eventName" required>
+
+    <label for="eventDate">Date:</label>
+    <input type="date" id="eventDate" name="eventDate" required>
+
+    <label for="eventTime">Time:</label>
+    <input type="time" id="eventTime" name="eventTime" required>
+
+    <label for="eventLocation">Location:</label>
+    <input type="text" id="eventLocation" name="eventLocation" required>
+
+    <label for="eventDescription">Description:</label>
+    <textarea id="eventDescription" name="eventDescription" required></textarea>
+
+    <button type="button" id="createEventBtn">Create Event</button>
+</form>
+<h2>Planned Events</h2>
+<ul id="eventList"></ul>
+<script src="../../scripts/event-planning.ts"></script>

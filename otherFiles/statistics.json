@@ -1,0 +1,16 @@
+[
+    { "date": "2023-01-01", "visitors": 120 },
+    { "date": "2023-01-02", "visitors": 150 },
+    { "date": "2023-01-03", "visitors": 170 },
+    { "date": "2023-01-04", "visitors": 200 },
+    { "date": "2023-01-05", "visitors": 220 },
+    { "date": "2023-01-10", "visitors": 230 },
+    { "date": "2023-01-11", "visitors": 250 },
+    { "date": "2023-01-12", "visitors": 270 },
+    { "date": "2023-01-13", "visitors": 300 },
+    { "date": "2023-01-14", "visitors": 320 },
+    { "date": "2023-01-15", "visitors": 340 },
+    { "date": "2023-01-16", "visitors": 360 },
+    { "date": "2023-01-17", "visitors": 380 },
+    { "date": "2023-01-18", "visitors": 400 }
+]
